@@ -1,0 +1,115 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Syne:wght@400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --purple-dark:  #2D1B69;
+  --purple-mid:   #4C1D95;
+  --purple-main:  #6D28D9;
+  --purple-light: #7C3AED;
+  --surface:      #FFFFFF;
+  --border:       #EDE9FE;
+  --text-primary: #1E1B4B;
+  --text-secondary: #6B7280;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background: linear-gradient(135deg, #2D1B69 0%, #4C1D95 50%, #6D28D9 100%);
+  min-height: 100vh;
+  color: #1E1B4B;
+  margin: 0;
+}
+
+/* ── Blob / drip decoration ── */
+.blob-top {
+  position: absolute;
+  top: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 260px;
+  height: 160px;
+  background: rgba(255,255,255,0.12);
+  border-radius: 0 0 60% 60% / 0 0 80px 80px;
+  filter: blur(0px);
+}
+
+.blob-top-white {
+  position: relative;
+  overflow: hidden;
+}
+.blob-top-white::before {
+  content: '';
+  position: absolute;
+  top: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 320px;
+  height: 200px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 0 0 50% 50%;
+  pointer-events: none;
+}
+
+/* Purple card surface */
+.card-purple {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  backdrop-filter: blur(12px);
+}
+
+/* White card on purple bg */
+.card-white {
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(45,27,105,0.18);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(109,40,217,0.3); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(109,40,217,0.5); }
+
+/* Transitions */
+button, a, input, select, textarea { transition: all 0.15s ease; }
+
+/* Animations */
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-slideUp { animation: slideUp 0.2s ease forwards; }
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(100%); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+.animate-slideInRight { animation: slideInRight 0.25s ease forwards; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to   { opacity: 1; transform: scale(1); }
+}
+.animate-fadeIn { animation: fadeIn 0.2s ease forwards; }
+
+@keyframes shimmer {
+  0%   { background-position: -200px 0; }
+  100% { background-position: calc(200px + 100%) 0; }
+}
+.skeleton {
+  background: linear-gradient(90deg, #ede9fe 25%, #ddd6fe 50%, #ede9fe 75%);
+  background-size: 200px 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* Purple glow on focused inputs */
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(109,40,217,0.2);
+  border-color: #7C3AED !important;
+}
