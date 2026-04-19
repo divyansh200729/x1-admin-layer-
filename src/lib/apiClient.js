@@ -25,6 +25,7 @@ const apiClient = {
     if (url === '/api/tasks') return safe(() => db.getTasks())
     if (url === '/api/employees') return safe(() => db.getEmployees())
     if (url === '/api/stock') return safe(() => db.getStock())
+    if (url === '/api/attendance') return safe(() => db.getAttendanceRecords())
     if (url.startsWith('/api/serial-lookup')) {
       const q = new URL(url, 'http://x').searchParams.get('q') || ''
       return safe(() => db.serialLookup(q))
@@ -40,6 +41,7 @@ const apiClient = {
     if (url === '/api/tasks') return safe(() => db.addTask(body))
     if (url === '/api/employees') return safe(() => db.addEmployee(body))
     if (url === '/api/employees/login') return safe(() => db.loginEmployee(body.email, body.password))
+    if (url === '/api/attendance') return safe(() => db.addAttendanceRecord(body))
     if (url === '/api/stock/import') return safe(async () => ({ imported: await db.importStock(body) }))
     throw makeError(`Unknown endpoint: ${url}`)
   },
@@ -52,6 +54,7 @@ const apiClient = {
     if (url.startsWith('/api/qc_tests/')) return safe(() => db.updateQCTest(id, body))
     if (url.startsWith('/api/tasks/')) return safe(() => db.updateTask(id, body))
     if (url.startsWith('/api/employees/')) return safe(() => db.updateEmployee(id, body))
+    if (url.startsWith('/api/attendance/')) return safe(() => db.updateAttendanceRecord(id, body))
     throw makeError(`Unknown endpoint: ${url}`)
   },
 
@@ -69,6 +72,7 @@ const apiClient = {
     if (url.startsWith('/api/qc_tests/')) return safe(() => db.deleteQCTest(id))
     if (url.startsWith('/api/tasks/')) return safe(() => db.deleteTask(id))
     if (url.startsWith('/api/employees/')) return safe(() => db.deleteEmployee(id))
+    if (url.startsWith('/api/attendance/')) return safe(() => db.deleteAttendanceRecord(id))
     if (url === '/api/stock') return safe(() => db.clearStock())
     throw makeError(`Unknown endpoint: ${url}`)
   },

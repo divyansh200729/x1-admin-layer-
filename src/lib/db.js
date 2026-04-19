@@ -135,6 +135,20 @@ export async function clearStock() {
   return q(supabase.from('stock_items').delete().gte('id', 1))
 }
 
+// ─── Attendance ───────────────────────────────────────────────
+export async function getAttendanceRecords() {
+  return q(supabase.from('attendance_records').select('*').order('date', { ascending: false }).order('created_at', { ascending: false }))
+}
+export async function addAttendanceRecord(data) {
+  return q(supabase.from('attendance_records').insert({ ...data, created_at: ts(), updated_at: ts() }).select().single())
+}
+export async function updateAttendanceRecord(id, data) {
+  return q(supabase.from('attendance_records').update({ ...data, updated_at: ts() }).eq('id', id).select().single())
+}
+export async function deleteAttendanceRecord(id) {
+  return q(supabase.from('attendance_records').delete().eq('id', id))
+}
+
 // ─── Serial Lookup ────────────────────────────────────────────
 export async function serialLookup(query) {
   const pattern = (query || '').trim()

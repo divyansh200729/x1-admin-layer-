@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import {
   Home, TrendingUp, Wrench, Package, ClipboardCheck, CheckSquare,
-  Users, LogOut, Menu, X, ScanLine, Archive
+  Users, LogOut, Menu, X, ScanLine, Archive, UserCheck
 } from 'lucide-react'
 import { isAdmin, canAccess, getCurrentUser } from '../utils/roleChecker'
 
@@ -18,8 +18,9 @@ const NAV_ITEMS = [
   { id: 'orders',  label: 'Orders',  path: '/orders',    icon: Package,       section: 'orders' },
   { id: 'qc',      label: 'QC',      path: '/qc',        icon: ClipboardCheck,section: 'qc' },
   { id: 'tasks',   label: 'Tasks',   path: '/tasks',     icon: CheckSquare,   section: 'tasks' },
-  { id: 'scanner', label: 'Scanner', path: '/scanner',   icon: ScanLine,      section: null },
-  { id: 'stock',   label: 'Stock',   path: '/stock',     icon: Archive,       section: null },
+  { id: 'attendance', label: 'Attendance', path: '/attendance', icon: UserCheck, section: 'attendance' },
+  { id: 'scanner',   label: 'Scanner',    path: '/scanner',    icon: ScanLine,  section: null },
+  { id: 'stock',     label: 'Stock',      path: '/stock',      icon: Archive,   section: null },
 ]
 
 export default function Layout({ children }) {
@@ -167,15 +168,16 @@ export default function Layout({ children }) {
           style={{ background: 'rgba(255,255,255,0.97)', backdropFilter: 'blur(16px)', borderTop: '1px solid rgba(109,40,217,0.1)', paddingBottom: 'env(safe-area-inset-bottom)' }}>
           <div className="flex items-center justify-around h-16 px-1">
             {[
-              { path: '/home',      icon: Home,          label: 'Home',    always: true },
-              { path: '/stock',     icon: Archive,       label: 'Stock',   always: true },
-              { path: '/scanner',   icon: ScanLine,      label: 'Scanner', always: true },
-              { path: '/sales',     icon: TrendingUp,    label: 'Sales',   section: 'sales' },
-              { path: '/service',   icon: Wrench,        label: 'Service', section: 'service' },
-              { path: '/orders',    icon: Package,       label: 'Orders',  section: 'orders' },
-              { path: '/qc',        icon: ClipboardCheck,label: 'QC',      section: 'qc' },
-              { path: '/tasks',     icon: CheckSquare,   label: 'Tasks',   section: 'tasks' },
-              { path: '/employees', icon: Users,         label: 'Team',    adminOnly: true },
+              { path: '/home',       icon: Home,          label: 'Home',       always: true },
+              { path: '/attendance', icon: UserCheck,    label: 'Attend.',    section: 'attendance' },
+              { path: '/stock',      icon: Archive,      label: 'Stock',      always: true },
+              { path: '/scanner',    icon: ScanLine,     label: 'Scanner',    always: true },
+              { path: '/sales',      icon: TrendingUp,   label: 'Sales',      section: 'sales' },
+              { path: '/service',    icon: Wrench,       label: 'Service',    section: 'service' },
+              { path: '/orders',     icon: Package,      label: 'Orders',     section: 'orders' },
+              { path: '/qc',         icon: ClipboardCheck,label: 'QC',        section: 'qc' },
+              { path: '/tasks',      icon: CheckSquare,  label: 'Tasks',      section: 'tasks' },
+              { path: '/employees',  icon: Users,        label: 'Team',       adminOnly: true },
             ].filter(t => t.always || (t.adminOnly && admin) || (t.section && canAccess(t.section)))
              .slice(0, 6)
              .map(tab => {

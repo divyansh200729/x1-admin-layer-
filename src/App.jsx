@@ -9,6 +9,7 @@ import Tasks from './pages/Tasks'
 import Employees from './pages/Employees'
 import SerialReader from './pages/SerialReader'
 import Stock from './pages/Stock'
+import Attendance from './pages/Attendance'
 import Layout from './components/Layout'
 import { canAccess, getCurrentUser } from './utils/roleChecker'
 
@@ -119,6 +120,12 @@ export default function App() {
       <Route path="/stock" element={
         <ProtectedRoute>
           <Layout><Stock /></Layout>
+        </ProtectedRoute>
+      } />
+
+      <Route path="/attendance" element={
+        <ProtectedRoute section="attendance">
+          <Layout><Attendance /></Layout>
         </ProtectedRoute>
       } />
 

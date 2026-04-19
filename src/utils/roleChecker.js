@@ -1,13 +1,13 @@
 // Role-to-section access mapping
 export const ROLE_ACCESS = {
-  'Admin': ['sales', 'service', 'orders', 'qc', 'tasks', 'employees'],
-  'Sales Executive': ['sales', 'orders'],
-  'Service Technician': ['service', 'orders'],
-  'Order Manager': ['orders', 'tasks'],
-  'QC Inspector': ['qc'],
-  'Design Engineer': ['sales', 'service', 'orders', 'qc', 'tasks'],
-  'AI Enabler': ['sales', 'service', 'orders', 'qc', 'tasks'],
-  'Other': ['sales', 'service', 'orders', 'qc', 'tasks'],
+  'Admin': ['sales', 'service', 'orders', 'qc', 'tasks', 'employees', 'attendance'],
+  'Sales Executive': ['sales', 'orders', 'attendance'],
+  'Service Technician': ['service', 'orders', 'attendance'],
+  'Order Manager': ['orders', 'tasks', 'attendance'],
+  'QC Inspector': ['qc', 'attendance'],
+  'Design Engineer': ['sales', 'service', 'orders', 'qc', 'tasks', 'attendance'],
+  'AI Enabler': ['sales', 'service', 'orders', 'qc', 'tasks', 'attendance'],
+  'Other': ['sales', 'service', 'orders', 'qc', 'tasks', 'attendance'],
 }
 
 // Get current user from localStorage
