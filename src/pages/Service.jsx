@@ -221,37 +221,59 @@ export default function Service() {
             </table>
           </div>
 
-          {/* Mobile */}
+          {/* Mobile Cards */}
           <div className="md:hidden divide-y divide-[#F0F2F5]">
-            {loading ? <div className="p-4 space-y-3">{Array.from({ length: 3 }).map((_, i) => <div key={i} className="h-20 skeleton rounded-xl" />)}</div> :
-              filtered.length === 0 ? (
-                <div className="py-16 text-center text-gray-400">
-                  <Wrench size={36} className="mx-auto text-gray-200 mb-2" />
-                  <p className="font-medium">No service records yet</p>
-                </div>
-              ) : filtered.map(r => (
-                <div key={r.id} className={`p-4 space-y-2 ${selected.has(r.id) ? 'bg-violet-50/50' : ''}`}>
-                  <div className="flex items-start justify-between">
-                    <div className="flex items-start gap-2.5">
-                      <input type="checkbox" checked={selected.has(r.id)} onChange={() => toggleSelect(r.id)}
-                        className="w-4 h-4 rounded border-gray-300 accent-violet-600 mt-0.5 shrink-0" />
-                      <div>
-                        <p className="font-semibold text-gray-900">{r.customer_name}</p>
-                        <p className="text-xs text-gray-500">{r.product_model} {r.serial_number ? `• ${r.serial_number}` : ''}</p>
-                      </div>
-                    </div>
-                    <Badge label={r.status} />
-                  </div>
-                  <div className="flex items-center justify-between text-xs text-gray-400">
-                    <span><Badge label={r.warranty_status} dot={false} /></span>
-                    <div className="flex gap-1">
-                      <a href={`https://wa.me/91${r.mobile.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer" className="p-1.5 rounded-lg text-green-600 hover:bg-green-50"><MessageCircle size={14} /></a>
-                      <button onClick={() => openEdit(r)} className="p-1.5 rounded-lg text-blue-500 hover:bg-blue-50"><Pencil size={14} /></button>
-                      <button onClick={() => setConfirm(r)} className="p-1.5 rounded-lg text-red-400 hover:bg-red-50"><Trash2 size={14} /></button>
+            {loading ? (
+              <div className="p-4 space-y-3">
+                {Array.from({ length: 3 }).map((_, i) => <div key={i} className="h-24 bg-gray-100 rounded-xl animate-pulse" />)}
+              </div>
+            ) : filtered.length === 0 ? (
+              <div className="py-16 text-center text-gray-400">
+                <Wrench size={36} className="mx-auto text-gray-200 mb-2" />
+                <p className="font-medium">No service records yet</p>
+              </div>
+            ) : filtered.map(r => (
+              <div key={r.id} className={`p-4 space-y-2.5 ${selected.has(r.id) ? 'bg-violet-50/50' : ''}`}>
+                {/* Row 1: checkbox + name + status */}
+                <div className="flex items-start justify-between gap-2">
+                  <div className="flex items-start gap-2.5 min-w-0">
+                    <input type="checkbox" checked={selected.has(r.id)} onChange={() => toggleSelect(r.id)}
+                      className="w-4 h-4 rounded border-gray-300 accent-violet-600 mt-0.5 shrink-0" />
+                    <div className="min-w-0">
+                      <p className="font-bold text-gray-800 text-sm leading-tight">{r.customer_name}</p>
+                      <a href={`tel:${r.mobile}`} className="text-xs text-blue-500 mt-0.5 block font-mono">{r.mobile}</a>
                     </div>
                   </div>
+                  <Badge label={r.status} />
                 </div>
-              ))}
+                {/* Row 2: device + warranty */}
+                <div className="pl-[26px] space-y-1">
+                  <p className="text-xs text-gray-700 font-medium truncate">{r.product_model}{r.serial_number ? ` · ${r.serial_number}` : ''}</p>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <Badge label={r.warranty_status} dot={false} />
+                    <span className="text-xs text-gray-400">{formatDate(r.date)}</span>
+                    {r.expected_return_date && (
+                      <span className={`text-xs font-semibold ${isOverdue(r.expected_return_date) ? 'text-red-500' : 'text-gray-400'}`}>
+                        Return: {formatDate(r.expected_return_date)}
+                      </span>
+                    )}
+                  </div>
+                </div>
+                {/* Row 3: actions */}
+                <div className="flex justify-end gap-1">
+                  <a href={`https://wa.me/91${r.mobile.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer"
+                    className="p-1.5 rounded-lg text-green-600 hover:bg-green-50 active:bg-green-100">
+                    <MessageCircle size={14} />
+                  </a>
+                  <button onClick={() => openEdit(r)} className="p-1.5 rounded-lg text-blue-500 hover:bg-blue-50 active:bg-blue-100">
+                    <Pencil size={14} />
+                  </button>
+                  <button onClick={() => setConfirm(r)} className="p-1.5 rounded-lg text-red-400 hover:bg-red-50 active:bg-red-100">
+                    <Trash2 size={14} />
+                  </button>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>

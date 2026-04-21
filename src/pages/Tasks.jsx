@@ -72,18 +72,18 @@ function TaskCard({ task, onEdit, onDelete, isDragging }) {
     >
       <div className="flex items-start justify-between gap-2 mb-2">
         <p className="text-sm font-semibold text-gray-900 leading-snug flex-1">{task.title}</p>
-        <div className="flex gap-0.5 opacity-0 group-hover:opacity-100 shrink-0">
+        <div className="flex gap-0.5 opacity-100 md:opacity-0 md:group-hover:opacity-100 shrink-0">
           <button
             onPointerDown={e => e.stopPropagation()}
             onClick={e => { e.stopPropagation(); onEdit(task) }}
-            className="p-1 rounded text-blue-500 hover:bg-blue-50"
+            className="p-1 rounded text-blue-500 hover:bg-blue-50 active:bg-blue-100"
           >
             <Pencil size={12} />
           </button>
           <button
             onPointerDown={e => e.stopPropagation()}
             onClick={e => { e.stopPropagation(); onDelete(task) }}
-            className="p-1 rounded text-red-400 hover:bg-red-50"
+            className="p-1 rounded text-red-400 hover:bg-red-50 active:bg-red-100"
           >
             <Trash2 size={12} />
           </button>

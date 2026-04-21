@@ -191,8 +191,8 @@ export default function Sales() {
           </div>
         )}
 
-        {/* Table */}
-        <div className="rounded-2xl overflow-hidden shadow-xl bg-white">
+        {/* Desktop Table */}
+        <div className="hidden md:block rounded-2xl overflow-hidden shadow-xl bg-white">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
@@ -250,7 +250,73 @@ export default function Sales() {
               </tbody>
             </table>
           </div>
+        </div>
 
+        {/* Mobile Cards */}
+        <div className="md:hidden space-y-3">
+          {loading ? (
+            <div className="space-y-3">
+              {Array.from({ length: 4 }).map((_, i) => (
+                <div key={i} className="h-28 bg-white rounded-2xl animate-pulse border border-gray-100" />
+              ))}
+            </div>
+          ) : filtered.length === 0 ? (
+            <div className="bg-white rounded-2xl p-12 text-center text-gray-400 shadow-sm border border-gray-100">
+              <TrendingUp size={36} className="mx-auto text-gray-200 mb-2" />
+              <p className="font-medium">No inquiries yet</p>
+              <p className="text-xs mt-1">Tap "Add New" to get started</p>
+            </div>
+          ) : filtered.map(r => (
+            <div key={r.id} className={`bg-white rounded-2xl shadow-sm border p-4 space-y-2.5 ${selected.has(r.id) ? 'border-violet-300 bg-violet-50/30' : 'border-gray-100'}`}>
+              {/* Row 1: Checkbox + Name + Status badge */}
+              <div className="flex items-start justify-between gap-2">
+                <div className="flex items-start gap-2.5 min-w-0">
+                  <input type="checkbox" checked={selected.has(r.id)} onChange={() => toggleSelect(r.id)}
+                    className="w-4 h-4 rounded border-gray-300 accent-violet-600 mt-0.5 shrink-0" />
+                  <div className="min-w-0">
+                    <p className="font-bold text-gray-800 text-sm leading-tight">{r.customer_name}</p>
+                    <a href={`tel:${r.mobile}`} className="text-xs text-blue-500 mt-0.5 block font-mono">{r.mobile}</a>
+                  </div>
+                </div>
+                <Badge label={r.status} />
+              </div>
+
+              {/* Row 2: Device + assigned + follow-up */}
+              <div className="pl-[26px] space-y-1">
+                {r.interested_in && (
+                  <p className="text-xs text-gray-700 font-medium truncate">📱 {r.interested_in}</p>
+                )}
+                <div className="flex items-center gap-3 flex-wrap">
+                  {r.assigned_to && (
+                    <span className="text-xs text-gray-500">👤 {r.assigned_to}</span>
+                  )}
+                  {r.follow_up_date && (
+                    <span className={`text-xs font-semibold ${isOverdue(r.follow_up_date) ? 'text-red-500' : 'text-gray-400'}`}>
+                      📅 {formatDate(r.follow_up_date)}
+                    </span>
+                  )}
+                  {r.city && <span className="text-xs text-gray-400">📍 {r.city}</span>}
+                </div>
+              </div>
+
+              {/* Row 3: Date + action buttons */}
+              <div className="flex items-center justify-between pt-0.5">
+                <span className="text-xs text-gray-400 pl-[26px]">{formatDate(r.date)}</span>
+                <div className="flex gap-1">
+                  <a href={`https://wa.me/91${r.mobile.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer"
+                    className="p-1.5 rounded-lg text-green-600 hover:bg-green-50 active:bg-green-100">
+                    <MessageCircle size={15} />
+                  </a>
+                  <button onClick={() => openEdit(r)} className="p-1.5 rounded-lg text-blue-500 hover:bg-blue-50 active:bg-blue-100">
+                    <Pencil size={15} />
+                  </button>
+                  <button onClick={() => setConfirm(r)} className="p-1.5 rounded-lg text-red-400 hover:bg-red-50 active:bg-red-100">
+                    <Trash2 size={15} />
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 
