@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import {
   Home, TrendingUp, Wrench, Package, ClipboardCheck, CheckSquare,
-  Users, LogOut, Menu, X, ScanLine, Archive, UserCheck
+  Users, LogOut, Menu, X, ScanLine, Archive, UserCheck, Settings
 } from 'lucide-react'
 import { isAdmin, canAccess, getCurrentUser } from '../utils/roleChecker'
 
@@ -90,7 +90,7 @@ export default function Layout({ children }) {
         )}
       </nav>
 
-      {/* User + Logout */}
+      {/* User + Settings + Logout */}
       <div className="px-3 py-4 border-t border-white/10 space-y-1">
         <div className="flex items-center gap-3 px-4 py-2.5 rounded-2xl bg-white/5">
           <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 shadow"
@@ -102,6 +102,15 @@ export default function Layout({ children }) {
             <p className="text-[10px] text-violet-300 truncate">{user?.role}</p>
           </div>
         </div>
+        <button onClick={() => { navigate('/settings'); onNav?.() }}
+          className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-2xl text-sm font-semibold transition-all ${
+            isActive('/settings')
+              ? 'bg-white text-violet-700 shadow-lg shadow-black/20'
+              : 'text-violet-300 hover:bg-white/10 hover:text-white'
+          }`}>
+          <Settings size={16} />
+          Settings & Activity
+        </button>
         <button onClick={handleLogout}
           className="w-full flex items-center gap-3 px-4 py-2.5 rounded-2xl text-sm font-semibold text-violet-300 hover:bg-white/10 hover:text-white transition-all">
           <LogOut size={16} />
@@ -167,20 +176,23 @@ export default function Layout({ children }) {
         <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-40"
           style={{ background: 'rgba(255,255,255,0.97)', backdropFilter: 'blur(16px)', borderTop: '1px solid rgba(109,40,217,0.1)', paddingBottom: 'env(safe-area-inset-bottom)' }}>
           <div className="flex items-center justify-around h-16 px-1">
-            {[
-              { path: '/home',       icon: Home,          label: 'Home',       always: true },
-              { path: '/attendance', icon: UserCheck,    label: 'Attend.',    always: true },
-              { path: '/stock',      icon: Archive,      label: 'Stock',      always: true },
-              { path: '/scanner',    icon: ScanLine,     label: 'Scanner',    always: true },
-              { path: '/sales',      icon: TrendingUp,   label: 'Sales',      section: 'sales' },
-              { path: '/service',    icon: Wrench,       label: 'Service',    section: 'service' },
-              { path: '/orders',     icon: Package,      label: 'Orders',     section: 'orders' },
-              { path: '/qc',         icon: ClipboardCheck,label: 'QC',        section: 'qc' },
-              { path: '/tasks',      icon: CheckSquare,  label: 'Tasks',      section: 'tasks' },
-              { path: '/employees',  icon: Users,        label: 'Team',       adminOnly: true },
-            ].filter(t => t.always || (t.adminOnly && admin) || (t.section && canAccess(t.section)))
-             .slice(0, 6)
-             .map(tab => {
+            {(() => {
+              const allTabs = [
+                { path: '/home',       icon: Home,           label: 'Home',    always: true },
+                { path: '/attendance', icon: UserCheck,      label: 'Attend.', always: true },
+                { path: '/stock',      icon: Archive,        label: 'Stock',   always: true },
+                { path: '/scanner',    icon: ScanLine,       label: 'Scanner', always: true },
+                { path: '/sales',      icon: TrendingUp,     label: 'Sales',   section: 'sales' },
+                { path: '/service',    icon: Wrench,         label: 'Service', section: 'service' },
+                { path: '/orders',     icon: Package,        label: 'Orders',  section: 'orders' },
+                { path: '/qc',         icon: ClipboardCheck, label: 'QC',      section: 'qc' },
+                { path: '/tasks',      icon: CheckSquare,    label: 'Tasks',   section: 'tasks' },
+                { path: '/employees',  icon: Users,          label: 'Team',    adminOnly: true },
+              ]
+              const settingsTab = { path: '/settings', icon: Settings, label: 'Settings', always: true }
+              const filtered = allTabs.filter(t => t.always || (t.adminOnly && admin) || (t.section && canAccess(t.section)))
+              return [...filtered.slice(0, 5), settingsTab]
+            })().map(tab => {
               const Icon = tab.icon
               const active = isActive(tab.path)
               return (
@@ -196,13 +208,6 @@ export default function Layout({ children }) {
                 </button>
               )
             })}
-            <button onClick={handleLogout}
-              className="flex flex-col items-center gap-0.5 px-1.5 py-2 rounded-2xl min-w-[44px] min-h-[44px] justify-center">
-              <div className="p-1.5 rounded-xl">
-                <LogOut size={19} className="text-gray-400" />
-              </div>
-              <span className="text-[9px] font-semibold text-gray-400">Logout</span>
-            </button>
           </div>
         </nav>
       </div>

@@ -10,6 +10,7 @@ import Employees from './pages/Employees'
 import SerialReader from './pages/SerialReader'
 import Stock from './pages/Stock'
 import Attendance from './pages/Attendance'
+import Settings from './pages/Settings'
 import Layout from './components/Layout'
 import { canAccess, getCurrentUser } from './utils/roleChecker'
 
@@ -126,6 +127,12 @@ export default function App() {
       <Route path="/attendance" element={
         <ProtectedRoute section="attendance">
           <Layout><Attendance /></Layout>
+        </ProtectedRoute>
+      } />
+
+      <Route path="/settings" element={
+        <ProtectedRoute>
+          <Layout><Settings /></Layout>
         </ProtectedRoute>
       } />
 
