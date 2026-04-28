@@ -4,7 +4,8 @@ import {
   ChevronRight, User, Lock, Eye, EyeOff, Shield,
   LogOut, ChevronLeft, Check, Smartphone, Clock
 } from 'lucide-react'
-import { getCurrentUser } from '../utils/roleChecker'
+import { getCurrentUser, getAdminPassword } from '../utils/roleChecker'
+import { changeEmployeePassword } from '../lib/db'
 
 function getInitials(name) {
   if (!name) return 'U'
@@ -226,15 +227,16 @@ function ProfileView({ user, onBack }) {
   )
 }
 
-function PasswordView({ onBack }) {
+function PasswordView({ user, onBack }) {
   const [current, setCurrent] = useState('')
   const [newPass, setNewPass] = useState('')
   const [confirm, setConfirm] = useState('')
   const [showCurrent, setShowCurrent] = useState(false)
   const [showNew, setShowNew] = useState(false)
   const [showConfirm, setShowConfirm] = useState(false)
-  const [status, setStatus] = useState(null) // 'success' | 'error' | null
+  const [status, setStatus] = useState(null)
   const [errorMsg, setErrorMsg] = useState('')
+  const [loading, setLoading] = useState(false)
 
   const savedLogins = (() => {
     try {
@@ -243,7 +245,7 @@ function PasswordView({ onBack }) {
     } catch { return [] }
   })()
 
-  const handleChangePassword = () => {
+  const handleChangePassword = async () => {
     setStatus(null)
     setErrorMsg('')
     if (!current || !newPass || !confirm) {
@@ -255,13 +257,23 @@ function PasswordView({ onBack }) {
     if (newPass.length < 6) {
       setStatus('error'); setErrorMsg('Password must be at least 6 characters.'); return
     }
-    // For admin hardcoded account
-    const user = JSON.parse(localStorage.getItem('x1_user') || '{}')
-    if (user.role === 'Admin' && current !== 'admin123') {
-      setStatus('error'); setErrorMsg('Current password is incorrect.'); return
+    setLoading(true)
+    try {
+      if (user?.role === 'Admin') {
+        if (current !== getAdminPassword()) {
+          setStatus('error'); setErrorMsg('Current password is incorrect.'); return
+        }
+        localStorage.setItem('x1_admin_pass', newPass)
+      } else {
+        await changeEmployeePassword(user.id, current, newPass)
+      }
+      setStatus('success')
+      setCurrent(''); setNewPass(''); setConfirm('')
+    } catch (e) {
+      setStatus('error'); setErrorMsg(e.message || 'Failed to update password.')
+    } finally {
+      setLoading(false)
     }
-    setStatus('success')
-    setCurrent(''); setNewPass(''); setConfirm('')
   }
 
   return (

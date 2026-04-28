@@ -117,6 +117,12 @@ export async function loginEmployee(email, password) {
   const { password: _, ...safe } = emp
   return safe
 }
+export async function changeEmployeePassword(id, currentPassword, newPassword) {
+  const emp = await q(supabase.from('employees').select('id,password').eq('id', id).maybeSingle())
+  if (!emp) throw new Error('Employee not found')
+  if (emp.password !== currentPassword) throw new Error('Current password is incorrect')
+  await q(supabase.from('employees').update({ password: newPassword, updated_at: new Date().toISOString() }).eq('id', id))
+}
 
 // ─── Stock ────────────────────────────────────────────────────
 export async function getStock() {

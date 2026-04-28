@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from '../lib/apiClient'
 import { useToast } from '../context/ToastContext'
-import { ADMIN_EMAIL, ADMIN_PASSWORD, ROLE_ACCESS } from '../utils/roleChecker'
+import { ADMIN_EMAIL, ROLE_ACCESS, getAdminPassword } from '../utils/roleChecker'
 
 export default function Auth() {
   const navigate = useNavigate()
@@ -30,7 +30,7 @@ export default function Auth() {
         await new Promise(r => setTimeout(r, 400))
         if (
           form.email.trim().toLowerCase() === ADMIN_EMAIL.toLowerCase() &&
-          form.password === ADMIN_PASSWORD
+          form.password === getAdminPassword()
         ) {
           localStorage.setItem('x1_user', JSON.stringify({
             id: 'admin_001', name: 'Admin', email: ADMIN_EMAIL,

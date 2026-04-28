@@ -38,3 +38,8 @@ export function canAccess(sectionId) {
 // Admin credentials (hardcoded for client-side check)
 export const ADMIN_EMAIL = 'admin@x1.com'
 export const ADMIN_PASSWORD = 'admin123'
+
+// Returns the active admin password — supports changes made in Settings
+export function getAdminPassword() {
+  try { return localStorage.getItem('x1_admin_pass') || ADMIN_PASSWORD } catch { return ADMIN_PASSWORD }
+}
